@@ -1,0 +1,146 @@
+{% extends "base/base.html" %}
+{% load box %}
+{% block title %}
+    漂流瓶
+{% endblock %}
+
+
+
+{% block style %}
+    <meta charset="UTF-8">
+    <meta name="keywords" content="HTML5 Admin Template" />
+    <meta name="description" content="Porto Admin - Responsive HTML5 Template">
+    <meta name="author" content="okler.net">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/static/assets/vendor/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="/static/assets/vendor/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/static/assets/vendor/magnific-popup/magnific-popup.css" />
+    <link rel="stylesheet" href="/static/assets/vendor/bootstrap-datepicker/css/datepicker3.css" />
+    <link rel="stylesheet" href="/static/assets/stylesheets/theme.css" />
+    <link rel="stylesheet" href="/static/assets/stylesheets/skins/default.css" />
+    <link rel="stylesheet" href="/static/assets/stylesheets/theme-custom.css">
+    <script src="/static/assets/vendor/modernizr/modernizr.js"></script>
+    <style>
+    .list li{float: left}
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+<header class="page-header">
+    <h2>所有漂流瓶</h2>
+    <div class="right-wrapper pull-right">
+        <ol class="breadcrumbs">
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i>
+                </a>
+            </li>
+            <li><span>漂流瓶</span></li>
+
+        </ol>
+
+        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fa fa-chevron-left"></i></a>
+    </div>
+</header>
+
+<div class="row">
+    <div class="col-md-12">
+    <section class="panel">
+    <header class="panel-heading">
+    <h2 class="panel-title">漂流瓶信息展示</h2>
+    </header>
+        <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div data-collapsed="0" class="panel">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2 form-group">
+                                <a href="/add_bottle" class="form-control btn-primary btn">新增漂流瓶</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-none">
+                <thead>
+                    <tr>
+                        <th>漂流瓶名称</th>
+                        <th>漂流瓶内容</th>
+                        <th>创建时间</th>
+                        <th>创建日期</th>
+                        <th>操作</th>
+                        <th>删除</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for bootle in data %}
+                    <tr>
+                        <td><a href="{% url 'home:bottle_detail' bootle.id %}" class="btn btn-primary btn-sm">{{ bootle.bottle_title }}</a></td>
+                        <td>
+                            {{ bootle.bottle_content | set_content }}
+                        </td>
+                        <td>{{ bootle.add_time }}</td>
+                        <td>{{ bootle.add_date }}</td>
+                        <td>
+                            <a href="{% url 'home:launch' bootle.id %}" class="btn btn-primary btn-sm">投放</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'home:delete_bottle' bootle.id %}" class="btn btn-primary btn-sm">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </section>
+    </div>
+    <ul class="list">
+       {% if data.has_previous %}
+        <a href="?page={{ data.previous_page_number }}&bottle_title={{ bottle_title }}&bottle_content={{ bottle_content }}" class="btn-sm btn">&lt;</a>
+        {% endif %}
+        {% for page in page_list %}
+            {% if request.GET.page %}
+                {% if page == request.GET.page|add:0 %}
+                    <a href="?page={{ page }}&bottle_title={{ bottle_title }}&bottle_content={{ bottle_content }}" class="btn-sm btn-success btn">{{ page }}</a>
+                {% elif  request.GET.page|add:0 > data.number and page == 1%}
+                    <a href="?page={{ page }}&bottle_title={{ bottle_title }}&bottle_content={{ bottle_content }}" class="btn-sm btn-success btn">{{ page }}</a>
+                {% else %}
+                    <a href="?page={{ page }}&bottle_title={{ bottle_title }}&bottle_content={{ bottle_content }}" class="btn-sm btn">{{ page }}</a>
+                {% endif %}
+            {% else %}
+                 {% if page == 1 %}
+                    <a href="?page={{ page }}&bottle_title={{ bottle_title }}&bottle_content={{ bottle_content }}" class="btn-sm btn-success btn">{{ page }}</a>
+                    {% else %}
+                    <a href="?page={{ page }}&bottle_title={{ bottle_title }}&bottle_content={{ bottle_content }}" class="btn-sm btn">{{ page }}</a>
+                 {% endif %}
+            {% endif %}
+        {% endfor %}
+         {% if data.has_next %}
+            <a href="?page={{ data.next_page_number }}&bottle_title={{ bottle_title }}&bottle_content={{ bottle_content }}" class="btn-sm btn">&gt;</a>
+         {% endif %}
+    </ul>
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+    <script src="/static/assets/vendor/jquery/jquery.js"></script>
+    <script src="/static/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
+    <script src="/static/assets/vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="/static/assets/vendor/nanoscroller/nanoscroller.js"></script>
+    <script src="/static/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="/static/assets/vendor/magnific-popup/magnific-popup.js"></script>
+    <script src="/static/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
+    <script src="/static/assets/javascripts/theme.js"></script>
+    <script src="/static/assets/javascripts/theme.custom.js"></script>
+    <script src="/static/assets/javascripts/theme.init.js"></script>
+{% endblock %}
+
